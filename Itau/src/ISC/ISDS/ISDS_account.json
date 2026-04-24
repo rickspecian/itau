@@ -1,0 +1,84 @@
+{
+    "name": "account",
+    "description": null,
+    "usageType": "CREATE",
+    "fields": [
+        {
+            "name": "dn",
+            "transform": {
+                "type": "rule",
+                "attributes": {
+                    "name": "ISDS Set Account DN"
+                }
+            },
+            "attributes": {
+                "cloudRequired": "true",
+                "cloudMaxUniqueChecks": "100"
+            },
+            "isRequired": true,
+            "type": "string",
+            "isMultiValued": false
+        },
+        {
+            "name": "password",
+            "transform": {
+                "type": "rule",
+                "attributes": {
+                    "name": "Create Password"
+                }
+            },
+            "attributes": {
+                "cloudRequired": "true"
+            },
+            "isRequired": true,
+            "type": "secret",
+            "isMultiValued": false
+        },
+        {
+            "name": "CN",
+            "transform": {
+                "type": "rule",
+                "attributes": {
+                    "name": "Create Unique LDAP Attribute"
+                }
+            },
+            "attributes": {
+                "template": "$(firstname).$(lastname)$(uniqueCounter)",
+                "cloudMaxUniqueChecks": "50",
+                "cloudMaxSize": "20",
+                "cloudRequired": "true"
+            },
+            "isRequired": true,
+            "type": "string",
+            "isMultiValued": false
+        },
+        {
+            "name": "givenName",
+            "transform": {
+                "type": "identityAttribute",
+                "attributes": {
+                    "name": "firstname"
+                }
+            },
+            "attributes": {},
+            "isRequired": false,
+            "type": "string",
+            "isMultiValued": false
+        },
+        {
+            "name": "SN",
+            "transform": {
+                "type": "identityAttribute",
+                "attributes": {
+                    "name": "lastname"
+                }
+            },
+            "attributes": {
+                "cloudRequired": "true"
+            },
+            "isRequired": true,
+            "type": "string",
+            "isMultiValued": false
+        }
+    ]
+}

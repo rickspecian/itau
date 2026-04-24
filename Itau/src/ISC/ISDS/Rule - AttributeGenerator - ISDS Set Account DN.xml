@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule name="ISDS Set Account DN" type="AttributeGenerator">
+    <Description>Generates the LDAP DN for ISDS provisioning. Refactored to align with IIQ Rule ISDS Set Account DN behavior.</Description>
+    <Source><![CDATA[
+
+        import sailpoint.tools.GeneralException;
+
+        private static void throwException(String message) {
+            String messageLog = "ForcedException : " + applicationName + " : " + ruleName + "\n" + message;
+            throw new GeneralException(messageLog);
+        }
+
+        int MAX_TRIES = 100;
+        String ruleName = "ISDS Set Account DN";
+        String applicationName = application.getName();
+        Object environment = application.getAttributeValue("c_environment");
+        if (environment == null || !(environment instanceof String)) {
+            throwException("c_environment is not a valid value");
+        }
+
+        String idtyType = identity.getAttribute("identityType");
+        String lab = "";
+        if ("sandbox".equals(environment)) {
+            lab = "_lab";
+        }
+
+        if ("partner".equals(idtyType)) {
+            String acctID = identity.getStringAttribute("itauloginebusiness");
+            if (acctID !=null){
+                return "uid=" + acctID + ",cn=users" + lab +",dc=rc,dc=itau";
+            }
+        } else if ("service".equals(idtyType)){
+            String identityName = identity.getName();
+            int size = 7 - identityName.length();
+            for (int i = 1; i < MAX_TRIES; i++) {
+                String sequence = "" + i;
+                while (sequence.length() < size) {
+                    sequence = "0" + sequence;
+                }
+                String username = "uid=" + identityName + sequence + ",cn=SvcAccounts" + lab +",dc=rc,dc=itau";
+                if (idn.isUniqueAccountId(identity.getName(), application.getName(), username)) {
+                    return username;
+                }
+            }
+            throw new GeneralException("OCI-UsernameGenerator: Unable to generate unique username after " + MAX_TRIES + " attempts.");
+        } else {
+            String acctID = identity.getAttribute("itaufuncional");
+            String acctDN = "";
+            if (acctID != null && !acctID.trim().isEmpty()) {
+                acctDN = "uid=" + acctID.trim() + ",cn=users" + lab +",dc=rc,dc=itau";
+            }
+            return acctDN;
+        }
+
+        ]]></Source>
+</Rule>

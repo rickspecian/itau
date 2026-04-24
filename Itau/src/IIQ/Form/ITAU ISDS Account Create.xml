@@ -1,0 +1,266 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Form PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Form created="1597410757602" id="0a3afd6673ed168a8173ed19cbe20040" modified="1681839525266" name="ITAU ISDS Account Create" type="Application">
+    <Attributes>
+        <Map>
+            <entry key="pageTitle" value="ITAU ISDS Account Create"/>
+        </Map>
+    </Attributes>
+    <Description>ISDS Account Create Provisioning Policy</Description>
+    <Section label="inetOrgPerson" name="inetOrgPerson">
+        <Attributes>
+            <Map>
+                <entry key="subtitle" value="Default ISDS structural class attributes"/>
+            </Map>
+        </Attributes>
+        <Field displayName="con_prov_policy_ldap_user_DN" helpKey="help_con_prov_policy_ldap_user_DN" name="dn" required="true" type="string">
+            <Attributes>
+                <Map>
+                    <entry key="readOnly" value="true"/>
+                </Map>
+            </Attributes>
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19c08e002b" name="ISDS Set Account DN"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="con_prov_policy_ldap_full_name" helpKey="help_con_prov_policy_ldap_full_name" name="displayName" type="string">
+            <Attributes>
+                <Map>
+                    <entry key="readOnly" value="true"/>
+                </Map>
+            </Attributes>
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19c3bb002c" name="ISDS Set Account displayName"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="con_prov_policy_ldap_first_name" helpKey="help_con_prov_policy_ldap_first_name" name="givenName" type="string">
+            <Attributes>
+                <Map>
+                    <entry key="readOnly" value="true"/>
+                </Map>
+            </Attributes>
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19c458002d" name="ISDS Set Account givenName"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="con_prov_policy_ldap_last_name" helpKey="help_con_prov_policy_ldap_last_name" name="sn" required="true" type="string">
+            <Attributes>
+                <Map>
+                    <entry key="readOnly" value="true"/>
+                </Map>
+            </Attributes>
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19c4e0002e" name="ISDS Set Account SN"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="con_prov_policy_ldap_password" helpKey="help_con_prov_policy_ldap_password" name="userPassword" required="true" type="secret">
+            <Attributes>
+                <Map>
+                    <entry key="hidden" value="true"/>
+                    <entry key="readOnly" value="true"/>
+                </Map>
+            </Attributes>
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19c546002f" name="ISDS Set Account userPassword"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="con_prov_policy_ldap_object_class" multi="true" name="objectClass" required="true" type="string">
+            <Attributes>
+                <Map>
+                    <entry key="readOnly" value="true"/>
+                </Map>
+            </Attributes>
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19c5c00030" name="ISDS Set Account objectClass"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="con_prov_policy_ldap_common_name" name="cn" required="true" type="string">
+            <Attributes>
+                <Map>
+                    <entry key="readOnly" value="true"/>
+                </Map>
+            </Attributes>
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19c64d0031" name="ISDS Set Account CN"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="con_prov_policy_mi_rd_uid" name="uid" required="true" type="string">
+            <Attributes>
+                <Map>
+                    <entry key="readOnly" value="true"/>
+                </Map>
+            </Attributes>
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19c64d0031" name="ISDS Set Account CN"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="att_itaufuncional" name="employeeNumber" type="string">
+            <Attributes>
+                <Map>
+                    <entry key="readOnly" value="true"/>
+                </Map>
+            </Attributes>
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd66773d152e81773ed5850112d8" name="ISDS Set Account Employee Number"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="att_identity_type" name="employeeType" type="string">
+            <Attributes>
+                <Map>
+                    <entry key="readOnly" value="true"/>
+                </Map>
+            </Attributes>
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19c6bb0032" name="ISDS Set Account employeeType"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="att_itaucodigodepartamento" name="departmentNumber" type="string">
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19c72a0033" name="ISDS Set Account departmentNumber"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="label_email_address" name="mail" type="string">
+            <Attributes>
+                <Map>
+                    <entry key="readOnly" value="true"/>
+                </Map>
+            </Attributes>
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19c78e0034" name="ISDS Set Account Mail"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="att_homeDirectory" helpKey="att_homeDirectory" name="homeDirectory" type="string">
+            <Script>
+                <Source>return "/home/"+identity.getAttribute("itauloginvarejo");</Source>
+            </Script>
+        </Field>
+        <Field displayName="att_loginShell" helpKey="att_loginShell" name="loginShell" type="string">
+            <Script>
+                <Source>return "/bin/bash";</Source>
+            </Script>
+        </Field>
+    </Section>
+    <Section label="itauAuxClass" name="itauAuxClass">
+        <Attributes>
+            <Map>
+                <entry key="subtitle" value="Custom ISDS auxiliary class attributes"/>
+            </Map>
+        </Attributes>
+        <Field displayName="att_itaucodigosituacaofuncional" name="itauIdentityStatus" type="string">
+            <Attributes>
+                <Map>
+                    <entry key="readOnly" value="true"/>
+                </Map>
+            </Attributes>
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19c7eb0035" name="ISDS Set Account itauIdentityStatus"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="att_itaunomesituacaofuncional" name="itauUserStatus" type="string">
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19c84f0036" name="ISDS Set Account itauUserStatus"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="att_itaucodigoempresa" name="itauCompanyCode" type="string">
+            <Attributes>
+                <Map>
+                    <entry key="readOnly" value="true"/>
+                </Map>
+            </Attributes>
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19c8aa0037" name="ISDS Set Account itauCompanyCode"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="att_itauloginvarejo" name="itauLoginItau" type="string">
+            <Attributes>
+                <Map>
+                    <entry key="readOnly" value="true"/>
+                </Map>
+            </Attributes>
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19c9060038" name="ISDS Set Account itauLoginItau"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="att_itauloginredecard" name="itauLoginRede" type="string">
+            <Attributes>
+                <Map>
+                    <entry key="readOnly" value="true"/>
+                </Map>
+            </Attributes>
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19c9670039" name="ISDS Set Account itauLoginRede"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="att_itauloginatacado" name="itauLoginIbba" type="string">
+            <Attributes>
+                <Map>
+                    <entry key="readOnly" value="true"/>
+                </Map>
+            </Attributes>
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19c9c5003a" name="ISDS Set Account itauLoginIbba"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="att_itauloginportoseguro" name="itauLoginSeguros" type="string">
+            <Attributes>
+                <Map>
+                    <entry key="readOnly" value="true"/>
+                </Map>
+            </Attributes>
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19ca1e003b" name="ISDS Set Account itauLoginSeguros"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="att_itaulogincartoes" name="itauLoginCartoesISDS" type="string">
+            <Attributes>
+                <Map>
+                    <entry key="readOnly" value="true"/>
+                </Map>
+            </Attributes>
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19ca7e003c" name="ISDS Set Account itauLoginCartoes"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="con_prov_policy_box_direct_LoginId" helpKey="att_itauloginvarejo" name="itauLoginRACF" type="string">
+            <Attributes>
+                <Map>
+                    <entry key="readOnly" value="true"/>
+                </Map>
+            </Attributes>
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19c9060038" name="ISDS Set Account itauLoginItau"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="con_prov_policy_ibmi_user_id" helpKey="help_con_prov_policy_ibmi_user_id" name="itauCloudUidNumber" type="int">
+            <Attributes>
+                <Map>
+                    <entry key="readOnly" value="true"/>
+                </Map>
+            </Attributes>
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19cae4003d" name="ISDS Set Account itauCloudUidNumber"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="con_prov_policy_ldap_GID" helpKey="help_con_prov_policy_ldap_GID" name="itauCloudGidNumber" type="int">
+            <Attributes>
+                <Map>
+                    <entry key="readOnly" value="true"/>
+                </Map>
+            </Attributes>
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19cb35003e" name="ISDS Set Account itauCloudGidNumber"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="con_prov_policy_azure_ad_userPrincipalName" helpKey="help_con_prov_policy_azure_ad_userPrincipalName" name="itauUPN" type="string">
+            <Attributes>
+                <Map>
+                    <entry key="readOnly" value="true"/>
+                </Map>
+            </Attributes>
+            <RuleRef>
+                <Reference class="sailpoint.object.Rule" id="0a3afd6673ed168a8173ed19cb90003f" name="ISDS Set Account itauUPN"/>
+            </RuleRef>
+        </Field>
+        <Field displayName="itauCartoesRedeLoginShell" name="itauCartoesRedeLoginShell" type="string" value="/usr/bin/ksh"/>
+    </Section>
+</Form>

@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1597410754702" id="0a3afd6673ed168a8173ed19c08e002b" language="beanshell" modified="1639146557120"
+      name="ISDS Set Account DN" type="FieldValue">
+    <Description>This rule can be used to generate a field value (eg - an account name) using data from the given
+        Identity. If this rule is run in the context of a workflow step then the arguments passed into the step will
+        also be available. Also, any field values that have been processed so far from the policy related to the
+        Application/Role will be available.
+    </Description>
+    <Signature returnType="String"/>
+    <Source>/*
+  	 Essa regra ira retornaro DN com:
+  	 - "itauloginebusiness" para identidades do tipo Parceiro
+  	 - "name" concatenado com o número da conta para identidades do tipo Servico
+  	 - "itaufuncional" para as demais identidades
+  	*/
+
+    import sailpoint.object.*;
+
+    String idtyType = identity.getType();
+    String acctID = null;
+    String acctDN = null;
+    if(idtyType !=null){
+        switch(idtyType ){
+            case"partner":
+                acctID =identity.getStringAttribute("itauloginebusiness");
+                if(acctID !=null){
+                    acctDN ="uid="+acctID +",cn=users,dc=rc,dc=itau";
+                }
+            return acctDN;
+            break;
+            case"service":
+                String identityName = identity.getName();
+                String applicationName = "ISDS";
+                String nativeIdentity;
+                int charSize = identityName.length();
+                String stringFormat = "%0" + Integer.toString(7 - charSize) + "d";
+                int count = 1;
+                int trys = 0;
+                while(count >0&amp;&amp;trys&lt; 100){
+                    trys++;
+                    nativeIdentity =identityName+String.format(stringFormat, trys);
+                    QueryOptions queryOptions = new QueryOptions();
+                    queryOptions.addFilter(Filter.like("nativeIdentity", "uid="+nativeIdentity +",cn=SvcAccounts,dc=rc,dc=itau"));
+                    queryOptions.addFilter(Filter.eq("application.name", applicationName));
+                    count =context.countObjects(Link .class, queryOptions);
+                 }
+
+                identityName =nativeIdentity;
+                if(identityName !=null){
+                    acctDN ="uid="+identityName +",cn=SvcAccounts,dc=rc,dc=itau";
+                    return acctDN;
+                }
+                break;
+            default:
+                acctID =identity.getStringAttribute("itaufuncional");
+                if(acctID !=null){
+                    acctDN ="uid="+acctID +",cn=users,dc=rc,dc=itau";
+                    return acctDN;
+                }
+            }
+        }
+        return acctDN;
+    </Source>
+</Rule>

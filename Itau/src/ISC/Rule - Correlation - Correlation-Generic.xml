@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule name="Correlation-Generic" type="Correlation">
+  <Description>Generic Correlation Rule using Source attribute c_correlationConfig</Description>
+  <Source><![CDATA[
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import sailpoint.rule.Identity;
+import sailpoint.tools.GeneralException;
+
+private static void throwException(String message) {
+    String messageLog = "ForcedException : " + applicationName + " : " + ruleName + "\n" + message;
+    throw new GeneralException(messageLog);
+}
+
+private String resolveValue(Object valueConfigs) {
+    if (valueConfigs == null || !(valueConfigs instanceof List) || (valueConfigs).isEmpty()) {
+        return null;
+    }
+    String value = "";
+    for (Object valueConfig : valueConfigs) {
+        if (valueConfig instanceof Map) {
+            Map valueConfigMap = valueConfig;
+            
+            String accountValue = valueConfigMap.get("accountValue");
+            if (accountValue == null || accountValue.isEmpty()) {
+                continue;
+            }
+            
+            String thisValue = null;
+            if (accountValue.startsWith("STRING:")) {
+                thisValue = accountValue.substring(7);
+            } else {
+                thisValue = account.getStringAttribute(accountValue);
+            }
+            if (thisValue == null || thisValue.isEmpty()) {
+                continue;
+            }
+
+            List replaceAllConfigs = valueConfigMap.get("replaceAll");
+            if (replaceAllConfigs != null) {
+                for (Object replaceAllConfig : replaceAllConfigs) {
+                    if (replaceAllConfig instanceof Map) {
+                        Map replaceAllConfigMap = replaceAllConfig;
+                        String searchExpression = replaceAllConfigMap.get("searchExpression");
+                        String replaceExpression = replaceAllConfigMap.get("replaceExpression");
+                        if (replaceExpression == null) {
+                            replaceExpression = "";
+                        }
+                        if (searchExpression != null) {
+                            thisValue = thisValue.replaceAll(searchExpression, replaceExpression);
+                        }
+                    }
+                }
+            }
+
+            if (Boolean.valueOf(valueConfigMap.get("upperCase"))) {
+                thisValue = thisValue.toUpperCase();
+            }
+
+            if (Boolean.valueOf(valueConfigMap.get("lowerCase"))) {
+                thisValue = thisValue.toLowerCase();
+            }
+
+            value += thisValue;
+        }
+    }
+    return value;
+}
+
+/* Nome da aplicação */
+String applicationName = application.getName();
+
+/* Nome da Rule */
+String ruleName = "Correlation-Generic";
+
+/* CONFIGURAÇÃO */
+/* Lista de configurações para correlação */
+Object correlationConfigs = application.getAttributeValue("c_correlationConfig");
+if (correlationConfigs == null || !(correlationConfigs instanceof List) || (correlationConfigs).isEmpty()) {
+    throwException("c_correlationConfig is not a valid List");
+}
+
+Map returnMap = new HashMap();
+
+for (Object correlationConfig : correlationConfigs) {
+    if (correlationConfig instanceof Map) {
+        Map correlationConfigMap = correlationConfig;
+
+        Object findIdentitiesBySearchableIdentityAttribute = correlationConfigMap.get("findIdentitiesBySearchableIdentityAttribute");
+        if (findIdentitiesBySearchableIdentityAttribute instanceof Map && !(findIdentitiesBySearchableIdentityAttribute).isEmpty()) {
+            Map searchableConfigMap = findIdentitiesBySearchableIdentityAttribute;
+            String attributeName = searchableConfigMap.get("attributeName");
+            String operation = searchableConfigMap.get("operation");
+            String value = resolveValue(searchableConfigMap.get("value"));
+            String sortAttribute = searchableConfigMap.get("sortAttribute");
+            if (attributeName == null || attributeName.isEmpty() || operation == null || operation.isEmpty() || value == null || value.isEmpty()) {
+                throwException("Invalid findIdentitiesBySearchableIdentityAttribute configuration");
+            }
+            List identities = idn.findIdentitiesBySearchableIdentityAttribute(attributeName, operation, value, sortAttribute);
+            if (identities != null && !identities.isEmpty()) {
+                Identity identity = identities.get(0);
+                returnMap.put("identityAttributeName", "id");
+                returnMap.put("identityAttributeValue", identity.getId());
+                return returnMap;
+            }
+            continue;
+        }
+
+        String identityAttributeName = correlationConfigMap.get("identityAttributeName");
+        String identityAttributeValue = resolveValue(correlationConfigMap.get("identityAttributeValue"));
+        if (identityAttributeName == null || identityAttributeName.isEmpty() || identityAttributeValue == null || identityAttributeValue.isEmpty()) {
+            throwException("Invalid identityAttributeName or identityAttributeValue configuration");
+        }
+        returnMap.put("identityAttributeName", identityAttributeName);
+        returnMap.put("identityAttributeValue", identityAttributeValue);
+        return returnMap;
+    }
+}
+
+]]></Source>
+</Rule>

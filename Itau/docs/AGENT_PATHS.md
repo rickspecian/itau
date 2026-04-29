@@ -1,34 +1,22 @@
 # Agent Paths - Itau
 
-## Canonical external paths
+## Canonical paths
 
-Use Google Drive path as primary source when available:
+Use these paths as the default source for agents:
 
-- `G:\My Drive\Projetos\Agentes\CLAUDE.md`
-- `G:\My Drive\Projetos\Agentes\BACKEND.md`
-- `G:\My Drive\Projetos\Agentes\FRONTEND.md`
-- `G:\My Drive\Projetos\Agentes\IIQ.md`
-- `G:\My Drive\Projetos\Agentes\ISC.md`
-- `G:\My Drive\Projetos\Agentes\REPORTER.md`
+- `C:\Projetos\java-configurations\CLAUDE.md`
+- `C:\Projetos\java-configurations\BACKEND.md`
+- `C:\Projetos\java-configurations\FRONTEND.md`
+- `C:\Projetos\java-configurations\IIQ.md`
+- `C:\Projetos\java-configurations\ISC.md`
+- `C:\Projetos\java-configurations\REPORTER.md`
 
-Superpowers primary path:
+Superpowers base path:
 
-- `G:\My Drive\Projetos\superpowers`
-
-## Local fallback paths (workspace clone)
-
-Use these when G: is not mounted:
-
-- `C:\Projetos\Agentes\CLAUDE.md`
-- `C:\Projetos\Agentes\BACKEND.md`
-- `C:\Projetos\Agentes\FRONTEND.md`
-- `C:\Projetos\Agentes\IIQ.md`
-- `C:\Projetos\Agentes\ISC.md`
-- `C:\Projetos\Agentes\REPORTER.md`
 - `C:\Projetos\superpowers`
 
 ## Notes
 
-- In this repository, `CLAUDE.md` at project root is the local orchestrator entrypoint.
-- Always resolve path availability first (G: then fallback C:).
+- The canonical orchestrator entrypoint is `C:\Projetos\java-configurations\CLAUDE.md`.
+- Execution order is mandatory: read `C:\Projetos\java-configurations\CLAUDE.md` first, then route to the target agent file.
 

@@ -3,7 +3,8 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$" />
-    <content url="file://G:/My Drive/Projetos" />
+    <content url="file://$MODULE_DIR$/../../java-configurations" />
+    <content url="file://$MODULE_DIR$/../../superpowers" />
     <orderEntry type="jdk" jdkName="corretto-17" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

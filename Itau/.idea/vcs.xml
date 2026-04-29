@@ -3,8 +3,9 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../.." vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../../java-configurations" vcs="Git" />
-    <mapping directory="G:/My Drive/Projetos" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../superpowers" vcs="Git" />
     <mapping directory="G:/My Drive/Projetos/Agentes" vcs="Git" />
     <mapping directory="G:/My Drive/Projetos/superpowers" vcs="Git" />
   </component>

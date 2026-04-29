@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule name="ISDS Set Account Login" type="AttributeGenerator">
+    <Description>Consolidated rule that generates account identifiers for ISDS provisioning.
+        Dispatches logic based on the provisioned field name (dn, cn, loginItau, employeeNumber)
+        and identity type (partner, service, or default).
+        - dn           : full LDAP distinguished name per identity type.
+        - cn           : common name only per identity type.
+        - loginItau    : unique service CN or itauloginvarejo.
+        - employeeNumber: empty for partner, identity name for service, itaufuncional for others.
+    </Description>
+    <Source><![CDATA[
+
+        import sailpoint.tools.GeneralException;
+
+        // Throws a formatted exception including rule and application context.
+        private static void throwException(String message) {
+            String messageLog = "ForcedException : " + applicationName + " : " + ruleName + "\n" + message;
+            throw new GeneralException(messageLog);
+        }
+
+        // Generates a unique CN for service identities by appending a zero-padded sequence
+        // until the resulting nativeIdentity is unique in the target application.
+        // idn is accessed directly — it must NOT be passed as a parameter (ISC runtime injection).
+        private String generateServiceCN(String identityName, String appName, String envLab, int maxTries, String rName) {
+            int padSize = 7 - identityName.length();
+            for (int i = 1; i <= maxTries; i++) {
+                String seq = "" + i;
+                while (seq.length() < padSize) {
+                    seq = "0" + seq;
+                }
+                String cn = identityName + seq;
+                String nativeId = "uid=" + cn + ",cn=SvcAccounts" + envLab + ",dc=rc,dc=itau";
+                if (idn.isUniqueAccountId(identityName, appName, nativeId)) {
+                    return cn;
+                }
+            }
+            throw new GeneralException(rName + ": Unable to generate unique CN after " + maxTries + " attempts.");
+        }
+
+        int MAX_TRIES = 100;
+        String ruleName = "ISDS Set Account Login";
+        String applicationName = application.getName();
+
+        Object environment = application.getAttributeValue("c_environment");
+        if (environment == null || !(environment instanceof String)) {
+            throwException("c_environment is not a valid value");
+        }
+
+        String lab = "sandbox".equals(environment) ? "_lab" : "";
+        String idtyType = identity.getAttribute("identityType");
+        String fieldName = field.getName();
+
+        // ── dn: full LDAP Distinguished Name ──────────────────────────────────
+        if ("cn".equals(fieldName)) {
+            if ("partner".equals(idtyType)) {
+                String v = identity.getAttribute("itauloginebusiness");
+                if (v != null) return "uid=" + v + ",cn=users" + lab + ",dc=rc,dc=itau";
+            } else if ("service".equals(idtyType)) {
+                String cn = generateServiceCN(identity.getName(), application.getName(), lab, MAX_TRIES, ruleName);
+                return "uid=" + cn + ",cn=SvcAccounts" + lab + ",dc=rc,dc=itau";
+            } else {
+                String v = identity.getAttribute("itaufuncional");
+                if (v != null && !v.trim().isEmpty()) return "uid=" + v.trim() + ",cn=users" + lab + ",dc=rc,dc=itau";
+                return "";
+            }
+
+        // ── cn: Common Name only ───────────────────────────────────────────────
+        } else if ("cn".equals(fieldName)) {
+            if ("partner".equals(idtyType)) {
+                return identity.getAttribute("itauloginebusiness");
+            } else if ("service".equals(idtyType)) {
+                return generateServiceCN(identity.getName(), application.getName(), lab, MAX_TRIES, ruleName);
+            } else {
+                return identity.getAttribute("itaufuncional");
+            }
+
+        // ── loginItau: service gets unique CN, others get itauloginvarejo ─────────
+        } else if ("itauLoginRACF".equals(fieldName) || "itauLoginCartoesISDS".equals(fieldName)) {
+            if ("service".equals(idtyType)) {
+                return generateServiceCN(identity.getName(), application.getName(), lab, MAX_TRIES, ruleName);
+            } else {
+                return identity.getAttribute("itauloginvarejo");
+            }
+
+        // ── employeeNumber: empty for partner, name for service, itaufuncional for others ─
+        } else if ("employeeNumber".equals(fieldName)) {
+            if ("partner".equals(idtyType)) {
+                return "";
+            } else if ("service".equals(idtyType)) {
+                return identity.getName();
+            } else {
+                return identity.getAttribute("itaufuncional");
+            }
+        }
+
+        return null;
+
+    ]]></Source>
+</Rule>
+
+
+
+
+
+

@@ -20,9 +20,6 @@ Use this map after `skills/using-superpowers/SKILL.md` bootstrap.
 
 ## Path resolution
 
-Primary:
-- `G:\My Drive\Projetos\superpowers\skills\...`
-
-Fallback:
+Canonical:
 - `C:\Projetos\superpowers\skills\...`
 

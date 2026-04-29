@@ -2,7 +2,7 @@
 
 ## ⚠️ REGRA ABSOLUTA — Leia antes de qualquer ação
 
-1. **Ler `CLAUDE.md`** na raiz do projeto SEMPRE antes de qualquer ação.
+1. **Ler `C:\Projetos\java-configurations\CLAUDE.md`** SEMPRE antes de qualquer ação.
 2. **NUNCA executar código, criar arquivos ou modificar artefatos sem `CONFIRMAR` explícito do usuário.**
 3. O fluxo obrigatório é:
 
@@ -16,19 +16,16 @@
 
 ## Roteamento por área
 
-- `src/main/java/**` → BACKEND (`G:\My Drive\Projetos\Agentes\BACKEND.md`)
-- `src/IIQ/**` → IIQ (`G:\My Drive\Projetos\Agentes\IIQ.md`)
-- `src/ISC/**` → ISC (`G:\My Drive\Projetos\Agentes\ISC.md`)
-- Comunicação de entrega → REPORTER (`G:\My Drive\Projetos\Agentes\REPORTER.md`)
-
-Fallback: `C:\Projetos\Agentes\<arquivo>.md`
+- `src/main/java/**` → BACKEND (`C:\Projetos\java-configurations\BACKEND.md`)
+- `src/IIQ/**` → IIQ (`C:\Projetos\java-configurations\IIQ.md`)
+- `src/ISC/**` → ISC (`C:\Projetos\java-configurations\ISC.md`)
+- Comunicação de entrega → REPORTER (`C:\Projetos\java-configurations\REPORTER.md`)
 
 ---
 
 ## Superpowers
 
-- Bootstrap: `G:\My Drive\Projetos\superpowers\skills\using-superpowers\SKILL.md`
-  (fallback: `C:\Projetos\superpowers\skills\using-superpowers\SKILL.md`)
+- Bootstrap: `C:\Projetos\superpowers\skills\using-superpowers\SKILL.md`
 - Seleção de skill por tipo: ver `docs/SKILLS_MAP.md`
 - Prompt com prefixo `/superpowers` ativa o modo Superpowers imediatamente.
 
